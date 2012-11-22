@@ -111,6 +111,11 @@ public class TypeFactoryTest {
 	    // Cloneable could be replaced by any interface
 	}
 	
+	private static interface I {};
+	private static interface J {};
+	private static class A<T extends I & J> {};
+	private static class B<T extends J & I> {};
+	
 	@Test
 	public void testJdk4Classes() throws Exception {
 		ReifiedType tp = getReifiedTypeFor("rawList");
@@ -285,6 +290,17 @@ public class TypeFactoryTest {
     @Test
     public void testMultiBoundedRecursiveGenericType() throws Exception {
         assertNotNull(TypeFactory.getType(TypeDescriptor.valueOf(MultiBoundedRecursiveGenericType.class)));
+    }
+    
+    @Test
+    public void testMultiBoundedGenericType() throws Exception {
+        ReifiedType reifiedA = TypeFactory.getType(TypeDescriptor.valueOf(A.class));
+        assertNotNull(reifiedA);
+        ReifiedType reifiedB = TypeFactory.getType(TypeDescriptor.valueOf(B.class));
+        assertNotNull(reifiedB);
+        ReifiedType aArg = reifiedA.getActualTypeArgument(0);
+        ReifiedType bArg = reifiedB.getActualTypeArgument(0);
+        assertEquals(aArg.getRawClass(), bArg.getRawClass());
     }
 
 	private ReifiedType getReifiedTypeFor(String methodName) {
