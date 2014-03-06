@@ -1047,6 +1047,11 @@ Ignored-Existing-Headers:
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>alfresco-repo-that-has-a-valid-jarjar-pom</id>
+            <name>Alfresco Repo that has a valid jarjar artifact</name>
+            <url>https://maven.alfresco.com/nexus/content/groups/public</url>
+        </repository>
         <!--
         <repository>
             <id>spring-release</id>
