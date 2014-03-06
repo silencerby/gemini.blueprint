@@ -1025,6 +1025,11 @@ Ignored-Existing-Headers:
 
     <repositories>
         <repository>
+            <id>alfresco-repo-that-has-a-valid-jarjar-pom</id>
+            <name>Alfresco Repo that has a valid jarjar artifact</name>
+            <url>https://maven.alfresco.com/nexus/content/groups/public</url>
+        </repository>
+        <repository>
             <id>com.springsource.repository.bundles.release</id>
             <name>SpringSource Enterprise Bundle Repository - SpringSource Bundle Releases</name>
             <url>http://repository.springsource.com/maven/bundles/release/</url>
@@ -1047,11 +1052,7 @@ Ignored-Existing-Headers:
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <id>alfresco-repo-that-has-a-valid-jarjar-pom</id>
-            <name>Alfresco Repo that has a valid jarjar artifact</name>
-            <url>https://maven.alfresco.com/nexus/content/groups/public</url>
-        </repository>
+
         <!--
         <repository>
             <id>spring-release</id>
