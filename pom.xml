@@ -987,10 +987,16 @@ Ignored-Existing-Headers:
     <!-- ================================================ -->
 
     <pluginRepositories>
+        
         <pluginRepository>
             <id>maven-repo</id>
             <name>maven repo</name>
             <url>http://repo1.maven.org/maven2/</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>alfresco-repo-that-has-a-valid-jarjar-pom</id>
+            <name>Alfresco Repo that has a valid jarjar artifact</name>
+            <url>https://maven.alfresco.com/nexus/content/groups/public</url>
         </pluginRepository>
         <!-- clover repository -->
         <!--
