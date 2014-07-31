@@ -14,12 +14,20 @@
 
 package org.eclipse.gemini.blueprint.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.Closeable;
 import java.io.Serializable;
 import java.util.AbstractMap;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
-
-import junit.framework.TestCase;
+import java.util.Set;
 
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.DelegatedExecutionOsgiBundleApplicationContext;
@@ -27,6 +35,7 @@ import org.eclipse.gemini.blueprint.context.support.AbstractDelegatedExecutionAp
 import org.eclipse.gemini.blueprint.context.support.AbstractOsgiBundleApplicationContext;
 import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.eclipse.gemini.blueprint.util.internal.ClassUtils;
+import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.HierarchicalBeanFactory;
@@ -48,14 +57,16 @@ import org.springframework.util.ObjectUtils;
  * @author Costin Leau
  * 
  */
-public class ClassUtilsTest extends TestCase {
+public class ClassUtilsTest {
 
+	@Test
 	public void testAutoDetectClassesForPublishingDisabled() throws Exception {
 		Class<?>[] clazz = ClassUtils.getClassHierarchy(Integer.class, ClassUtils.ClassSet.INTERFACES);
 		assertFalse(ObjectUtils.isEmpty(clazz));
 		assertEquals(2, clazz.length);
 	}
 
+	@Test
 	public void testAutoDetectClassesForPublishingInterfaces() throws Exception {
 		Class<?>[] clazz = ClassUtils.getClassHierarchy(HashMap.class, ClassUtils.ClassSet.INTERFACES);
 		Class<?>[] expected = new Class<?>[] { Cloneable.class, Serializable.class, Map.class };
@@ -63,12 +74,14 @@ public class ClassUtilsTest extends TestCase {
 		assertTrue(compareArrays(expected, clazz));
 	}
 
+	@Test
 	public void testAutoDetectClassesForPublishingClassHierarchy() throws Exception {
 		Class<?>[] clazz = ClassUtils.getClassHierarchy(HashMap.class, ClassUtils.ClassSet.CLASS_HIERARCHY);
 		Class<?>[] expected = new Class<?>[] { HashMap.class, AbstractMap.class };
 		assertTrue(compareArrays(expected, clazz));
 	}
 
+	@Test
 	public void testAutoDetectClassesForPublishingAll() throws Exception {
 		Class<?>[] clazz = ClassUtils.getClassHierarchy(HashMap.class, ClassUtils.ClassSet.ALL_CLASSES);
 		Class<?>[] expected =
@@ -77,17 +90,20 @@ public class ClassUtilsTest extends TestCase {
 		assertTrue(compareArrays(expected, clazz));
 	}
 
+	@Test
 	public void testInterfacesHierarchy() {
 		Class<?>[] clazz = ClassUtils.getAllInterfaces(DelegatedExecutionOsgiBundleApplicationContext.class);
 		Class<?>[] expected =
 				{ ConfigurableOsgiBundleApplicationContext.class, ConfigurableApplicationContext.class,
 						ApplicationContext.class, Lifecycle.class, EnvironmentCapable.class, ListableBeanFactory.class,
 						HierarchicalBeanFactory.class, MessageSource.class, ApplicationEventPublisher.class,
-						ResourcePatternResolver.class, BeanFactory.class, ResourceLoader.class };
+						ResourcePatternResolver.class, BeanFactory.class, ResourceLoader.class,
+						Closeable.class, AutoCloseable.class };
 
 		assertTrue(compareArrays(expected, clazz));
 	}
 
+	@Test
 	public void testAppContextClassHierarchy() {
 		Class<?>[] clazz =
 				ClassUtils.getClassHierarchy(OsgiBundleXmlApplicationContext.class, ClassUtils.ClassSet.ALL_CLASSES);
@@ -101,37 +117,38 @@ public class ClassUtilsTest extends TestCase {
 						ConfigurableOsgiBundleApplicationContext.class, ConfigurableApplicationContext.class,
 						ApplicationContext.class, Lifecycle.class, EnvironmentCapable.class, ListableBeanFactory.class,
 						HierarchicalBeanFactory.class, ApplicationEventPublisher.class, ResourcePatternResolver.class,
-						MessageSource.class, BeanFactory.class, DisposableBean.class };
+						MessageSource.class, BeanFactory.class, DisposableBean.class,
+						Closeable.class, AutoCloseable.class };
 
 		assertTrue(compareArrays(expected, clazz));
 	}
 
-	private boolean compareArrays(Object[] a, Object[] b) {
-		if ((a == null && b != null) || (b == null && a != null))
+	private boolean compareArrays(Object[] expected, Object[] actual) {
+		if ((expected == null && actual != null) || (actual == null && expected != null))
 			return false;
 
-		if (a == null && b == null)
+		if (expected == null && actual == null)
 			return true;
 
-		if (a == b)
+		if (expected == actual)
 			return true;
 
-		if (a.length != b.length)
+		return assertArraysContentMatch(expected, actual);
+	}
+
+	private static boolean assertArraysContentMatch(Object[] expected, Object[] actual) {
+		Set<Object> expectedSet = new HashSet<Object>(Arrays.asList(expected.clone()));
+		Set<Object> actualSet = new HashSet<Object>(Arrays.asList(actual.clone()));
+		for (Iterator<Object> i = expectedSet.iterator(); i.hasNext();) {
+			Object expected1 = i.next();
+			if (actualSet.contains(expected1)) {
+				i.remove();
+				actualSet.remove(expected1);
+			}
+		}
+		if (expectedSet.size() > 0 || actualSet.size() > 0) {
+			fail("Arrays are not the same: expected={" + expectedSet + "}, actual={" + actualSet + "}");
 			return false;
-
-		for (int i = 0; i < a.length; i++) {
-			boolean found = false;
-			for (int j = 0; j < b.length; j++) {
-				if (a[i].equals(b[j])) {
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				System.out.println("did not find " + a[i]);
-				return false;
-			}
-
 		}
 		return true;
 	}

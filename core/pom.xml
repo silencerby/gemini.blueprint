@@ -5,14 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>gemini-blueprint</artifactId>
-        <groupId>org.eclipse.gemini.blueprint</groupId>
-        <version>2.0.0.BUILD-SNAPSHOT</version>
+        <groupId>org.eclipse.gemini</groupId>
+        <artifactId>org.eclipse.gemini.blueprint</artifactId>
+        <version>2.0.0.M02_1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.eclipse.gemini.blueprint</groupId>
-    <artifactId>gemini-blueprint-core</artifactId>
+    <artifactId>org.eclipse.gemini.blueprint.core</artifactId>
     <packaging>jar</packaging>
     <url>http://www.eclipse.org/gemini/blueprint/</url>
     <name>Gemini Blueprint Core</name>
@@ -29,12 +28,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.eclipse.gemini.blueprint</groupId>
-            <artifactId>gemini-blueprint-io</artifactId>
+            <groupId>org.eclipse.gemini</groupId>
+            <artifactId>org.eclipse.gemini.blueprint.io</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.gemini.blueprint</groupId>
-            <artifactId>gemini-blueprint-mock</artifactId>
+            <groupId>org.eclipse.gemini</groupId>
+            <artifactId>org.eclipse.gemini.blueprint.mock</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -69,7 +68,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>multithreadedtc</groupId>
+            <groupId>com.googlecode.multithreadedtc</groupId>
             <artifactId>multithreadedtc</artifactId>
             <version>1.01</version>
             <scope>test</scope>

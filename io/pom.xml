@@ -5,14 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>gemini-blueprint</artifactId>
-        <groupId>org.eclipse.gemini.blueprint</groupId>
-        <version>2.0.0.BUILD-SNAPSHOT</version>
+        <groupId>org.eclipse.gemini</groupId>
+        <artifactId>org.eclipse.gemini.blueprint</artifactId>
+        <version>2.0.0.M02_1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.eclipse.gemini.blueprint</groupId>
-    <artifactId>gemini-blueprint-io</artifactId>
+    <artifactId>org.eclipse.gemini.blueprint.io</artifactId>
     <packaging>jar</packaging>
     <name>Gemini Blueprint IO</name>
     <url>http://www.eclipse.org/gemini/blueprint/</url>
@@ -30,8 +29,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.eclipse.gemini.blueprint</groupId>
-            <artifactId>gemini-blueprint-mock</artifactId>
+            <groupId>org.eclipse.gemini</groupId>
+            <artifactId>org.eclipse.gemini.blueprint.mock</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

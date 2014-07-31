@@ -7,11 +7,10 @@
     <parent>
         <artifactId>gemini-blueprint</artifactId>
         <groupId>org.eclipse.gemini.blueprint</groupId>
-        <version>2.0.0.BUILD-SNAPSHOT</version>
+        <version>2.0.0.M02_1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.eclipse.gemini.blueprint</groupId>
     <artifactId>gemini-blueprint-test</artifactId>
     <packaging>jar</packaging>
     <name>Gemini Blueprint Testing Framework</name>
@@ -32,6 +31,20 @@
 
         <bundle.description>${project.description}</bundle.description>
     </properties>
+
+	<repositories>
+		<repository>
+			<id>knopflerfish</id>
+			<name>knopflerfish</name>
+			<url>http://www.knopflerfish.org/maven2/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+	</repositories>
 
     <dependencies>
 
@@ -67,14 +80,12 @@
         <dependency>
             <groupId>org.eclipse.gemini.blueprint</groupId>
             <artifactId>gemini-blueprint-core</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
 
         <!-- used for getting Counter util in -->
         <dependency>
             <groupId>org.eclipse.gemini.blueprint</groupId>
             <artifactId>gemini-blueprint-extender</artifactId>
-            <version>${project.parent.version}</version>
             <optional>true</optional>
         </dependency>
 
@@ -125,7 +136,6 @@
         <dependency>
             <groupId>org.eclipse.gemini.blueprint</groupId>
             <artifactId>gemini-blueprint-mock</artifactId>
-            <version>${project.parent.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

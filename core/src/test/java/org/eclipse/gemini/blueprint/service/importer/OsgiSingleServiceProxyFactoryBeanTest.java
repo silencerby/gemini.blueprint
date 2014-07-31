@@ -22,16 +22,14 @@ import java.util.Hashtable;
 import junit.framework.TestCase;
 
 import org.easymock.MockControl;
-import org.eclipse.gemini.blueprint.service.importer.ImportedOsgiServiceProxy;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 import org.eclipse.gemini.blueprint.service.importer.support.ImportContextClassLoaderEnum;
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceProxyFactoryBean;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.springframework.aop.SpringProxy;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
-import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 
 /**
  * @author Adrian Colyer
@@ -47,6 +45,7 @@ public class OsgiSingleServiceProxyFactoryBeanTest extends TestCase {
 
 	private BundleContext bundleContext;
 
+	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		this.serviceFactoryBean = new OsgiServiceProxyFactoryBean();
@@ -104,19 +103,6 @@ public class OsgiSingleServiceProxyFactoryBeanTest extends TestCase {
 				.isAssignableFrom(this.serviceFactoryBean.getObjectType()));
 		assertTrue("mixing interface not introduced", ImportedOsgiServiceProxy.class
 				.isAssignableFrom(this.serviceFactoryBean.getObjectType()));
-	}
-
-	public void testObjectTypeWOCompositeInterface() {
-		this.serviceFactoryBean.setInterfaces(new Class<?>[] { AbstractApplicationContext.class });
-		this.serviceFactoryBean.setBundleContext(this.bundleContext);
-		this.serviceFactoryBean.afterPropertiesSet();
-
-		try {
-			this.serviceFactoryBean.getObjectType();
-			fail("should not be able to create composite interface when a class is specified since CGLIB is not in the classpath");
-		} catch (Exception ex) {
-
-		}
 	}
 
 	// OsgiServiceUtils are tested independently in error cases, here we

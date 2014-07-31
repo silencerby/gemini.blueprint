@@ -8,10 +8,10 @@
         <maven>3.0.3</maven>
     </prerequisites>
 
-    <groupId>org.eclipse.gemini.blueprint</groupId>
-    <artifactId>gemini-blueprint</artifactId>
+    <groupId>org.eclipse.gemini</groupId>
+    <artifactId>org.eclipse.gemini.blueprint</artifactId>
     <!-- Note: When updating the version, ensure it is a valid OSGi version -->
-    <version>2.0.0.BUILD-SNAPSHOT</version>
+    <version>2.0.0.M02_1</version>
     <packaging>pom</packaging>
     <name>Gemini Blueprint</name>
     <url>http://www.eclipse.org/gemini/blueprint/</url>
@@ -29,7 +29,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Spring version -->
-        <spring.maven.artifact.version>3.1.1.RELEASE</spring.maven.artifact.version>
+        <spring.maven.artifact.version>3.2.5.RELEASE</spring.maven.artifact.version>
         <spring.base.version>3.0.0</spring.base.version>
 
         <symName.prefix>org.eclipse.gemini.blueprint</symName.prefix>
@@ -46,7 +46,7 @@
         <env.svnRevision></env.svnRevision>
 
         <!-- platform versions -->
-        <equinox.ver>3.6.2.R36x_v20110210</equinox.ver>
+        <equinox.ver>3.7.1</equinox.ver>
         <!-- Knopflerfish 3.5 -->
         <kf.ver>5.3.3</kf.ver>
         <felix.ver>2.0.5</felix.ver>
@@ -179,35 +179,35 @@
         <module>io</module>
         <module>core</module>
         <module>extender</module>
-        <module>test-support</module>
+<!--         <module>test-support</module> -->
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <!-- Gemini Blueprint -->
             <dependency>
-                <groupId>org.eclipse.gemini.blueprint</groupId>
-                <artifactId>gemini-blueprint-mock</artifactId>
+                <groupId>org.eclipse.gemini</groupId>
+                <artifactId>org.eclipse.gemini.blueprint.mock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.eclipse.gemini.blueprint</groupId>
-                <artifactId>gemini-blueprint-io</artifactId>
+                <groupId>org.eclipse.gemini</groupId>
+                <artifactId>org.eclipse.gemini.blueprint.io</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.eclipse.gemini.blueprint</groupId>
-                <artifactId>gemini-blueprint-core</artifactId>
+                <groupId>org.eclipse.gemini</groupId>
+                <artifactId>org.eclipse.gemini.blueprint.core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.eclipse.gemini.blueprint</groupId>
-                <artifactId>gemini-blueprint-extender</artifactId>
+                <groupId>org.eclipse.gemini</groupId>
+                <artifactId>org.eclipse.gemini.blueprint.extender</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.eclipse.gemini.blueprint</groupId>
-                <artifactId>gemini-blueprint-test</artifactId>
+                <groupId>org.eclipse.gemini</groupId>
+                <artifactId>org.eclipse.gemini.blueprint.test</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -313,23 +313,35 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>1</version>
+			<groupId>org.apache.servicemix.bundles</groupId>
+			<artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
+            <version>1_2</version>
         </dependency>
 
         <!-- junit -->
+<!--         <dependency> -->
+<!--             <groupId>org.junit</groupId> -->
+<!--             <artifactId>com.springsource.org.junit</artifactId> -->
+<!--             <version>4.9.0</version> -->
+<!--             <scope>test</scope> -->
+<!--         </dependency> -->
         <dependency>
-            <groupId>org.junit</groupId>
-            <artifactId>com.springsource.org.junit</artifactId>
-            <version>4.9.0</version>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		    <version>4.11</version>
             <scope>test</scope>
         </dependency>
 
+<!--         <dependency> -->
+<!--             <groupId>easymock</groupId> -->
+<!--             <artifactId>easymock</artifactId> -->
+<!--             <version>1.2_Java1.3</version> -->
+<!--             <scope>test</scope> -->
+<!--         </dependency> -->
         <dependency>
-            <groupId>easymock</groupId>
+			<groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
-            <version>1.2_Java1.3</version>
+			<version>2.3</version>
             <scope>test</scope>
         </dependency>
 
@@ -480,7 +492,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>2.3.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -521,6 +533,18 @@
                     <groupId>org.eclipse.virgo.bundlor</groupId>
                     <artifactId>org.eclipse.virgo.bundlor.maven</artifactId>
                     <version>1.1.2.RELEASE</version>
+                    <dependencies>
+						<dependency>
+							<groupId>org.eclipse.virgo.bundlor</groupId>
+							<artifactId>org.eclipse.virgo.bundlor</artifactId>
+							<version>1.1.2.RELEASE</version>
+						</dependency>
+						<dependency>
+							<groupId>org.eclipse.virgo.bundlor</groupId>
+							<artifactId>org.eclipse.virgo.bundlor.blint</artifactId>
+							<version>1.1.2.RELEASE</version>
+						</dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -537,6 +561,31 @@
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>2.7</version>
                 </plugin>
+        		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        		<plugin>
+        			<groupId>org.eclipse.m2e</groupId>
+        			<artifactId>lifecycle-mapping</artifactId>
+        			<version>1.0.0</version>
+        			<configuration>
+        				<lifecycleMappingMetadata>
+        					<pluginExecutions>
+        						<pluginExecution>
+        							<pluginExecutionFilter>
+        								<groupId>org.eclipse.virgo.bundlor</groupId>
+        								<artifactId>org.eclipse.virgo.bundlor.maven</artifactId>
+        								<versionRange>[1.1.2.RELEASE,)</versionRange>
+        								<goals>
+        									<goal>bundlor</goal>
+        								</goals>
+        							</pluginExecutionFilter>
+        							<action>
+        								<ignore></ignore>
+        							</action>
+        						</pluginExecution>
+        					</pluginExecutions>
+        				</lifecycleMappingMetadata>
+        			</configuration>
+        		</plugin>
             </plugins>
         </pluginManagement>
 
@@ -565,8 +614,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <debug>true</debug>
                     <fork>true</fork>
                 </configuration>
