@@ -12,6 +12,7 @@ eclipse_config
 .classpath
 .settings
 */.settings
+git.properties
 
 # Intelli-J
 *.iml
