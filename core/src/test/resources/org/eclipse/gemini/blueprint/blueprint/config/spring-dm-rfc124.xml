@@ -23,5 +23,7 @@
 	<service id="service" ref="foo" auto-export="all-classes" />
 	
 	<osgi:service id="dm.exporter" auto-export="all-classes" ref="foo"/>
-	
+
+	<osgi:service id="dm.exporter2" auto-export="all-classes" context-class-loader="service-provider" ref="foo"/>
+
 </blueprint>

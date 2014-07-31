@@ -19,7 +19,7 @@ import org.eclipse.gemini.blueprint.blueprint.config.internal.BlueprintParser;
 import org.eclipse.gemini.blueprint.blueprint.config.internal.BlueprintReferenceBeanDefinitionParser;
 import org.eclipse.gemini.blueprint.blueprint.config.internal.BlueprintServiceDefinitionParser;
 import org.eclipse.gemini.blueprint.blueprint.config.internal.ParsingUtils;
-import org.eclipse.gemini.blueprint.service.importer.support.CollectionType;
+import org.eclipse.gemini.blueprint.service.importer.support.CollectionTypeEnum;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
@@ -141,8 +141,8 @@ class BlueprintBeanDefinitionParser implements BeanDefinitionParser {
 		BeanDefinitionParser parser = new BlueprintCollectionBeanDefinitionParser() {
 
 			@Override
-			protected CollectionType collectionType() {
-				return CollectionType.LIST;
+			protected CollectionTypeEnum collectionType() {
+				return CollectionTypeEnum.LIST;
 			}
 		};
 		parser.parse(ele, parserContext);
@@ -152,8 +152,8 @@ class BlueprintBeanDefinitionParser implements BeanDefinitionParser {
 		BeanDefinitionParser parser = new BlueprintCollectionBeanDefinitionParser() {
 
 			@Override
-			protected CollectionType collectionType() {
-				return CollectionType.SET;
+			protected CollectionTypeEnum collectionType() {
+				return CollectionTypeEnum.SET;
 			}
 		};
 

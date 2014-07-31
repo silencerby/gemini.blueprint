@@ -85,15 +85,6 @@ public abstract class AbstractOsgiTests extends AbstractOptionalDependencyInject
 	}
 
 	/**
-	 * Constructs a new <code>AbstractOsgiTests</code> instance.
-	 * 
-	 * @param name test name
-	 */
-	public AbstractOsgiTests(String name) {
-		super(name);
-	}
-
-	/**
 	 * Returns the test framework bundles (part of the test setup). Used by the test infrastructure. Override this
 	 * method <i>only</i> if you want to change the jars used by default, by the testing infrastructure.
 	 * 
@@ -454,6 +445,7 @@ public abstract class AbstractOsgiTests extends AbstractOptionalDependencyInject
 			// No shutdown hook registered yet.
 			shutdownHook = new Thread() {
 
+				@Override
 				public void run() {
 					shutdownTest();
 				}

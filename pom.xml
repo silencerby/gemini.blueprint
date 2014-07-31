@@ -29,7 +29,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Spring version -->
-        <spring.maven.artifact.version>3.2.5.RELEASE</spring.maven.artifact.version>
+<!--         <spring.maven.artifact.version>3.2.5.RELEASE</spring.maven.artifact.version> -->
+        <spring.maven.artifact.version>4.0.3.RELEASE_1</spring.maven.artifact.version>
         <spring.base.version>3.0.0</spring.base.version>
 
         <symName.prefix>org.eclipse.gemini.blueprint</symName.prefix>
@@ -67,7 +68,7 @@
         <!-- bundlor settings -->
         <bundlor.enabled>true</bundlor.enabled>
         <!-- common version ranges -->
-        <spring.version.range.nq>[${spring.base.version},4.0)</spring.version.range.nq>
+        <spring.version.range.nq>[${spring.base.version},4.1.0)</spring.version.range.nq>
         <spring.version.range>"${spring.version.range.nq}"</spring.version.range>
         <gemini.blueprint.version.range.nq>[${project.version},${project.version}]</gemini.blueprint.version.range.nq>
         <gemini.blueprint.version.range>"${gemini.blueprint.version.range.nq}"</gemini.blueprint.version.range>
@@ -213,8 +214,8 @@
 
             <!-- Spring -->
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-aop</artifactId>
+                <groupId>org.apache.servicemix.bundles</groupId>
+                <artifactId>org.apache.servicemix.bundles.spring-aop</artifactId>
                 <version>${spring.maven.artifact.version}</version>
                 <exclusions>
                     <exclusion>
@@ -229,8 +230,8 @@
             </dependency>
 
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-beans</artifactId>
+                <groupId>org.apache.servicemix.bundles</groupId>
+                <artifactId>org.apache.servicemix.bundles.spring-beans</artifactId>
                 <version>${spring.maven.artifact.version}</version>
                 <exclusions>
                     <exclusion>
@@ -241,8 +242,8 @@
             </dependency>
 
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-core</artifactId>
+                <groupId>org.apache.servicemix.bundles</groupId>
+                <artifactId>org.apache.servicemix.bundles.spring-core</artifactId>
                 <version>${spring.maven.artifact.version}</version>
                 <exclusions>
                     <exclusion>
@@ -253,8 +254,8 @@
             </dependency>
 
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
+                <groupId>org.apache.servicemix.bundles</groupId>
+                <artifactId>org.apache.servicemix.bundles.spring-context</artifactId>
                 <version>${spring.maven.artifact.version}</version>
                 <exclusions>
                     <exclusion>
@@ -265,8 +266,8 @@
             </dependency>
 
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context-support</artifactId>
+                <groupId>org.apache.servicemix.bundles</groupId>
+                <artifactId>org.apache.servicemix.bundles.spring-context-support</artifactId>
                 <version>${spring.maven.artifact.version}</version>
                 <exclusions>
                     <exclusion>
@@ -277,8 +278,8 @@
             </dependency>
 
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-test</artifactId>
+                <groupId>org.apache.servicemix.bundles</groupId>
+                <artifactId>org.apache.servicemix.bundles.spring-test</artifactId>
                 <version>${spring.maven.artifact.version}</version>
                 <exclusions>
                     <exclusion>

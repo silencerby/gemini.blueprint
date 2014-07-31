@@ -19,15 +19,15 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.gemini.blueprint.service.importer.OsgiServiceLifecycleListener;
+import org.eclipse.gemini.blueprint.service.importer.support.Availability;
+import org.eclipse.gemini.blueprint.service.importer.support.CollectionTypeEnum;
+import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceCollectionProxyFactoryBean;
+import org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.blueprint.container.BlueprintEvent;
 import org.osgi.service.blueprint.container.BlueprintListener;
 import org.springframework.beans.factory.DisposableBean;
-import org.eclipse.gemini.blueprint.service.importer.OsgiServiceLifecycleListener;
-import org.eclipse.gemini.blueprint.service.importer.support.Availability;
-import org.eclipse.gemini.blueprint.service.importer.support.CollectionType;
-import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceCollectionProxyFactoryBean;
-import org.eclipse.gemini.blueprint.util.BundleDelegatingClassLoader;
 
 /**
  * Management class sending notifications to ModuleContextListener services. The class deals with the management of the
@@ -62,7 +62,7 @@ class BlueprintListenerManager implements BlueprintListener, DisposableBean {
 		OsgiServiceCollectionProxyFactoryBean fb = new OsgiServiceCollectionProxyFactoryBean();
 		fb.setBundleContext(context);
 		fb.setAvailability(Availability.OPTIONAL);
-		fb.setCollectionType(CollectionType.LIST);
+		fb.setCollectionType(CollectionTypeEnum.LIST);
 		fb.setInterfaces(new Class[] { BlueprintListener.class });
 		fb.setBeanClassLoader(BundleDelegatingClassLoader.createBundleClassLoaderFor(context.getBundle()));
 		fb.setListeners(new OsgiServiceLifecycleListener[] { new RegistrationReplayDelivery() });

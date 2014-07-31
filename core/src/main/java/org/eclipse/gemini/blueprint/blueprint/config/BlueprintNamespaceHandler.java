@@ -18,7 +18,7 @@ import org.eclipse.gemini.blueprint.blueprint.config.internal.BlueprintCollectio
 import org.eclipse.gemini.blueprint.blueprint.config.internal.BlueprintParser;
 import org.eclipse.gemini.blueprint.blueprint.config.internal.BlueprintReferenceBeanDefinitionParser;
 import org.eclipse.gemini.blueprint.blueprint.config.internal.BlueprintServiceDefinitionParser;
-import org.eclipse.gemini.blueprint.service.importer.support.CollectionType;
+import org.eclipse.gemini.blueprint.service.importer.support.CollectionTypeEnum;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
@@ -42,15 +42,17 @@ class BlueprintNamespaceHandler extends NamespaceHandlerSupport {
 		registerBeanDefinitionParser(BlueprintBeanDefinitionParser.REFERENCE_LIST,
 				new BlueprintCollectionBeanDefinitionParser() {
 
-					protected CollectionType collectionType() {
-						return CollectionType.LIST;
+					@Override
+					protected CollectionTypeEnum collectionType() {
+						return CollectionTypeEnum.LIST;
 					}
 				});
 		registerBeanDefinitionParser(BlueprintBeanDefinitionParser.REFERENCE_SET,
 				new BlueprintCollectionBeanDefinitionParser() {
 
-					protected CollectionType collectionType() {
-						return CollectionType.SET;
+					@Override
+					protected CollectionTypeEnum collectionType() {
+						return CollectionTypeEnum.SET;
 					}
 				});
 

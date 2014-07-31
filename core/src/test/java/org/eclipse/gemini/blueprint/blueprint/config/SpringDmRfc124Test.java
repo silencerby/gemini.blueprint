@@ -19,14 +19,14 @@ import java.util.Arrays;
 import junit.framework.TestCase;
 
 import org.eclipse.gemini.blueprint.context.support.BundleContextAwareProcessor;
+import org.eclipse.gemini.blueprint.mock.MockBundleContext;
+import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.ClassPathResource;
-import org.eclipse.gemini.blueprint.mock.MockBundleContext;
-import org.eclipse.gemini.blueprint.mock.MockServiceReference;
 
 /**
  * @author Costin Leau
@@ -40,10 +40,12 @@ public class SpringDmRfc124Test extends TestCase {
 	private XmlBeanDefinitionReader reader;
 
 
+	@Override
 	protected void setUp() throws Exception {
 		BundleContext bundleContext = new MockBundleContext() {
 
 			// service reference already registered
+			@Override
 			public ServiceReference[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
 				return new ServiceReference[] { new MockServiceReference(new String[] { Cloneable.class.getName() }) };
 			}
@@ -58,6 +60,7 @@ public class SpringDmRfc124Test extends TestCase {
 		context.refresh();
 	}
 
+	@Override
 	protected void tearDown() throws Exception {
 		context.close();
 		context = null;
@@ -65,6 +68,6 @@ public class SpringDmRfc124Test extends TestCase {
 
 	public void testContainerSanity() throws Exception {
 		System.out.println(Arrays.toString(context.getBeanDefinitionNames()));
-		assertEquals(5, context.getBeanDefinitionCount());
+		assertEquals(6, context.getBeanDefinitionCount());
 	}
 }

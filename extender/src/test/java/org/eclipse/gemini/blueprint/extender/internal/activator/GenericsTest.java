@@ -16,11 +16,11 @@ package org.eclipse.gemini.blueprint.extender.internal.activator;
 
 import junit.framework.TestCase;
 
-import org.springframework.core.GenericTypeResolver;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEvent;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextListener;
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleContextClosedEvent;
 import org.eclipse.gemini.blueprint.extender.internal.activator.GenericsTest.SomeClass.AnotherClass.NestedListener;
+import org.springframework.core.GenericTypeResolver;
 
 /**
  * Basic generic detection test.
@@ -41,7 +41,7 @@ public class GenericsTest extends TestCase {
 	}
 
 	public void testRawType() throws Exception {
-		assertSame(null, GenericTypeResolver.resolveTypeArgument(RawListener.class,
+		assertSame(OsgiBundleApplicationContextEvent.class, GenericTypeResolver.resolveTypeArgument(RawListener.class,
 				OsgiBundleApplicationContextListener.class));
 	}
 

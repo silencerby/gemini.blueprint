@@ -114,7 +114,7 @@ public final class OsgiServiceCollectionProxyFactoryBean extends AbstractService
 
 	private Comparator comparator;
 
-	private CollectionType collectionType = CollectionType.LIST;
+	private CollectionTypeEnum collectionType = CollectionTypeEnum.LIST;
 	/** greedy-proxying */
 	private boolean greedyProxying = false;
 
@@ -130,6 +130,7 @@ public final class OsgiServiceCollectionProxyFactoryBean extends AbstractService
 		controller = new ImporterController(new Executor());
 	}
 
+	@Override
 	public void afterPropertiesSet() {
 		super.afterPropertiesSet();
 
@@ -158,20 +159,20 @@ public final class OsgiServiceCollectionProxyFactoryBean extends AbstractService
 		Filter filter = getUnifiedFilter();
 		boolean useServiceReferences = MemberType.SERVICE_REFERENCE.equals(memberType);
 
-		if (CollectionType.LIST.equals(collectionType)) {
+		if (CollectionTypeEnum.LIST.equals(collectionType)) {
 			collection =
 					(comparator == null ? new OsgiServiceList(filter, bundleContext, classLoader, proxyCreator,
 							useServiceReferences) : new OsgiServiceSortedList(filter, bundleContext, classLoader,
 							comparator, proxyCreator, useServiceReferences));
 			delegate = Collections.unmodifiableList((List) collection);
-		} else if (CollectionType.SET.equals(collectionType)) {
+		} else if (CollectionTypeEnum.SET.equals(collectionType)) {
 			collection =
 					(comparator == null ? new OsgiServiceSet(filter, bundleContext, classLoader, proxyCreator,
 							useServiceReferences) : new OsgiServiceSortedSet(filter, bundleContext, classLoader,
 							comparator, proxyCreator, useServiceReferences));
 
 			delegate = Collections.unmodifiableSet((Set) collection);
-		} else if (CollectionType.SORTED_LIST.equals(collectionType)) {
+		} else if (CollectionTypeEnum.SORTED_LIST.equals(collectionType)) {
 			collection =
 					new OsgiServiceSortedList(filter, bundleContext, classLoader, comparator, proxyCreator,
 							useServiceReferences);
@@ -179,7 +180,7 @@ public final class OsgiServiceCollectionProxyFactoryBean extends AbstractService
 			delegate = Collections.unmodifiableList((List) collection);
 		}
 
-		else if (CollectionType.SORTED_SET.equals(collectionType)) {
+		else if (CollectionTypeEnum.SORTED_SET.equals(collectionType)) {
 			collection =
 					new OsgiServiceSortedSet(filter, bundleContext, classLoader, comparator, proxyCreator,
 							useServiceReferences);
@@ -236,7 +237,7 @@ public final class OsgiServiceCollectionProxyFactoryBean extends AbstractService
 	 * 
 	 * <p/> Thus, instead of list a sorted list will be created and instead of a set, a sorted set.
 	 * 
-	 * @see #setCollectionType(CollectionType)
+	 * @see #setCollectionType(CollectionTypeEnum)
 	 * 
 	 * @param comparator Comparator (can be null) used for ordering the resulting collection.
 	 */
@@ -252,11 +253,11 @@ public final class OsgiServiceCollectionProxyFactoryBean extends AbstractService
 	 * @see #setComparator(Comparator)
 	 * @see java.lang.Comparable
 	 * @see java.util.Comparator
-	 * @see CollectionType
+	 * @see CollectionTypeEnum
 	 * 
 	 * @param collectionType the collection type as string using one of the values above.
 	 */
-	public void setCollectionType(CollectionType collectionType) {
+	public void setCollectionType(CollectionTypeEnum collectionType) {
 		Assert.notNull(collectionType);
 		this.collectionType = collectionType;
 	}
@@ -298,10 +299,5 @@ public final class OsgiServiceCollectionProxyFactoryBean extends AbstractService
 	public void setMemberType(MemberType type) {
 		Assert.notNull(type);
 		this.memberType = type;
-	}
-
-	@Override
-	Cardinality getInternalCardinality() {
-		return (Availability.OPTIONAL.equals(getAvailability()) ? Cardinality.C_0__N : Cardinality.C_1__N);
 	}
 }

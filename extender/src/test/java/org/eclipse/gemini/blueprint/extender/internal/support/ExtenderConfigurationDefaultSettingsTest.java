@@ -14,16 +14,17 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.support;
 
+import java.util.List;
+
 import junit.framework.TestCase;
+
 import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextEventMulticasterAdapter;
 import org.eclipse.gemini.blueprint.extender.internal.dependencies.startup.MandatoryImporterDependencyFactory;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.osgi.framework.BundleContext;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.timer.TimerTaskExecutor;
-
-import java.util.List;
+import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 
 /**
  * @author Costin Leau
@@ -33,12 +34,14 @@ public class ExtenderConfigurationDefaultSettingsTest extends TestCase {
 	private ExtenderConfiguration config;
 	private BundleContext bundleContext;
 
+	@Override
 	protected void setUp() throws Exception {
 		bundleContext = new MockBundleContext();
 		config = new ExtenderConfiguration();
         this.config.start(this.bundleContext);
 	}
 
+	@Override
 	protected void tearDown() throws Exception {
 		config.start(this.bundleContext);
 		config = null;
@@ -50,7 +53,7 @@ public class ExtenderConfigurationDefaultSettingsTest extends TestCase {
 
 	public void testShutdownTaskExecutor() throws Exception {
 		TaskExecutor executor = config.getShutdownTaskExecutor();
-		assertTrue(executor instanceof TimerTaskExecutor);
+		assertTrue(executor instanceof ConcurrentTaskExecutor);
 	}
 
 	public void testEventMulticaster() throws Exception {

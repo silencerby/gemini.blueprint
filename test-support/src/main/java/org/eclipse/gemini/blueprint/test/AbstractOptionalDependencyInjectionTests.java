@@ -24,7 +24,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
+import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.util.ObjectUtils;
 
 /**
@@ -35,7 +35,7 @@ import org.springframework.util.ObjectUtils;
  * @author Costin Leau
  * 
  */
-public abstract class AbstractOptionalDependencyInjectionTests extends AbstractDependencyInjectionSpringContextTests {
+public abstract class AbstractOptionalDependencyInjectionTests extends AbstractJUnit4SpringContextTests {
 
 	// The OSGi BundleContext (when executing the test as a bundle inside OSGi)
 	protected BundleContext bundleContext;
@@ -55,6 +55,7 @@ public abstract class AbstractOptionalDependencyInjectionTests extends AbstractD
 	private static class EmptyOsgiApplicationContext extends AbstractDelegatedExecutionApplicationContext implements
 			DisposableBean {
 
+		@Override
 		protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws IOException, BeansException {
 		}
 
@@ -68,17 +69,6 @@ public abstract class AbstractOptionalDependencyInjectionTests extends AbstractD
 	 */
 	public AbstractOptionalDependencyInjectionTests() {
 		super();
-	}
-
-	/**
-	 * 
-	 * Constructs a new <code>AbstractOptionalDependencyInjectionTests</code>
-	 * instance.
-	 * 
-	 * @param name test name
-	 */
-	public AbstractOptionalDependencyInjectionTests(String name) {
-		super(name);
 	}
 
 	protected boolean isContextKeyEmpty(Object key) {

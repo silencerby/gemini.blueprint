@@ -14,29 +14,32 @@
 
 package org.eclipse.gemini.blueprint.context.support.internal;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.util.Properties;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
 
-public class ScopeTests extends TestCase {
+public class ScopeTests {
 
-	private static Object tag;
+	private Object tag;
 
-	private static Runnable callback = null;
+	private Runnable callback = null;
 
 
-	private static abstract class AbstractScope implements Scope {
+	private abstract class AbstractScope implements Scope {
 
 		public String getConversationId() {
 			System.out.println("returning conversation id");
@@ -63,11 +66,11 @@ public class ScopeTests extends TestCase {
 		public Object get(String name, ObjectFactory objectFactory) {
 			System.out.println("tag is " + tag);
 			System.out.println("requested " + name + " w/ objFact " + objectFactory);
-			if (ScopeTests.tag == null) {
+			if (tag == null) {
 				Object obj = objectFactory.getObject();
 				System.out.println("set tag to " + obj);
 				System.out.println("obj is " + obj + "|hash=" + System.identityHashCode(obj));
-				ScopeTests.tag = obj;
+				tag = obj;
 			}
 
 			return tag;
@@ -79,14 +82,12 @@ public class ScopeTests extends TestCase {
 	private DefaultListableBeanFactory bf;
 
 
-	private class ScopedXmlFactory extends XmlBeanFactory {
-
-		public ScopedXmlFactory(Resource resource, BeanFactory parentBeanFactory) throws BeansException {
-			super(resource, parentBeanFactory);
-		}
+	private class ScopedXmlFactory extends DefaultListableBeanFactory {
+		private final XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(this);
 
 		public ScopedXmlFactory(Resource resource) throws BeansException {
-			super(resource);
+			super(null);
+			this.reader.loadBeanDefinitions(resource);
 			registerScope("foo", new FooScope());
 			registerScope("bar", new FooScope());
 		}
@@ -94,20 +95,23 @@ public class ScopeTests extends TestCase {
 	}
 
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		Resource file = new ClassPathResource("scopes.xml");
 		bf = new ScopedXmlFactory(file);
-
 		callback = null;
 		tag = null;
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		bf.destroySingletons();
+		bf = null;
 		callback = null;
 		tag = null;
 	}
 
+	@Test
 	public void testScopes() throws Exception {
 
 		assertNull(tag);
@@ -131,6 +135,7 @@ public class ScopeTests extends TestCase {
 		System.out.println(ObjectUtils.nullSafeToString(ClassUtils.getAllInterfaces(scopedA)));
 	}
 
+	//@Test
 	public void testCallback() throws Exception {
 		Object a = bf.getBean("a");
 		// assertNotNull(callback);

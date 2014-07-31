@@ -14,6 +14,18 @@
 
 package org.eclipse.gemini.blueprint.extender.internal.support;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
@@ -35,19 +47,9 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.timer.TimerTaskExecutor;
+import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Properties;
-import java.util.Timer;
 
 /**
  * Configuration class for the extender. Takes care of locating the extender specific configurations and merging the
@@ -375,15 +377,31 @@ public class ExtenderConfiguration implements BundleActivator {
 		return taskExecutor;
 	}
 
-	private TaskExecutor createDefaultShutdownTaskExecutor() {
-		TimerTaskExecutor taskExecutor = new TimerTaskExecutor() {
-			@Override
-			protected Timer createTimer() {
-				return new Timer("Gemini Blueprint context shutdown thread", true);
-			}
-		};
+	private static class DefaultShutdownTaskExecutor extends ConcurrentTaskExecutor implements DisposableBean {
+		
+		private ExecutorService executor;
 
-		taskExecutor.afterPropertiesSet();
+		public DefaultShutdownTaskExecutor() {
+			super();
+			executor = Executors.newSingleThreadExecutor(new ThreadFactory() {
+				@Override
+				public Thread newThread(Runnable r) {
+					Thread t = new Thread(r, "Gemini Blueprint context shutdown thread");
+					t.setDaemon(true);
+					return t;
+				}
+			});
+			setConcurrentExecutor(executor);
+		}
+
+		public void destroy() {
+			executor.shutdown();
+		}
+
+	}
+
+	private TaskExecutor createDefaultShutdownTaskExecutor() {
+		ConcurrentTaskExecutor taskExecutor = new DefaultShutdownTaskExecutor(); 
 		isShutdownTaskExecutorManagedInternally = true;
 		return taskExecutor;
 	}

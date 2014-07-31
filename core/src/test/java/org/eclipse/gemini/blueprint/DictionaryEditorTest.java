@@ -16,41 +16,32 @@ package org.eclipse.gemini.blueprint;
 
 import java.util.Dictionary;
 
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.beans.propertyeditors.PropertiesEditor;
-import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
+import javax.inject.Inject;
 
-public class DictionaryEditorTest extends AbstractDependencyInjectionSpringContextTests {
+//@ContextConfiguration({"classpath:/org/eclipse/gemini/blueprint/dict-editor.xml"})
+public class DictionaryEditorTest /*extends AbstractJUnit4SpringContextTests*/ {
 
+	@Inject
 	private Dictionary dictionary;
 
+//	protected void customizeBeanFactory(DefaultListableBeanFactory beanFactory) {
+//		beanFactory.registerCustomEditor(Dictionary.class, PropertiesEditor.class);
+//		super.customizeBeanFactory(beanFactory);
+//	}
 
-	/**
-	 * @param property The dictionary to set.
-	 */
-	public void setDictionary(Dictionary property) {
-		this.dictionary = property;
-	}
-
-	protected void customizeBeanFactory(DefaultListableBeanFactory beanFactory) {
-		beanFactory.registerCustomEditor(Dictionary.class, PropertiesEditor.class);
-		super.customizeBeanFactory(beanFactory);
-	}
-
-	protected String[] getConfigLocations() {
-		//return new String[] { "/org/eclipse/gemini/blueprint/dict-editor.xml" };
-		return null;
-	}
-
+	//@Test
 	public void tstInjection() {
-		assertNotNull(dictionary);
+		//assertNotNull(dictionary);
 	}
 
+	//@Test
 	public void tstInjectedValue() {
-		assertSame(applicationContext.getBean("dictionary"), dictionary);
+		//assertSame(applicationContext.getBean("dictionary"), dictionary);
 	}
 
+	//@Test
 	public void testSanity() throws Exception {
 		System.out.println(String[][].class);
 	}
+
 }

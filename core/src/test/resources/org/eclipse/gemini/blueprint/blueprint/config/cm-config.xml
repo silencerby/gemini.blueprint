@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bp:blueprint xmlns="http://www.osgi.org/xmlns/blueprint-cm/v1.0.0"
+<bp:blueprint xmlns="http://www.springframework.org/schema/osgi-compendium"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:bp="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:beans="http://www.springframework.org/schema/beans"
 	xsi:schemaLocation="
-		http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
-		http://www.osgi.org/xmlns/blueprint-cm/v1.0.0 http://www.osgi.org/xmlns/blueprint-cm/v1.0.0/blueprint-cm.xsd">
+		http://www.osgi.org/xmlns/blueprint/v1.0.0
+		http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+		http://www.springframework.org/schema/osgi-compendium
+       	http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd
+       	http://www.springframework.org/schema/beans
+       	http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<!-- 
 
@@ -35,20 +40,20 @@
 	<!-- ccl specified -->
 	<managed-service-factory id="ccl" factory-pid="my.pid">
 		<interfaces>
-			<value>java.util.Map</value>
-			<value>java.io.Serializable</value>
+			<beans:value>java.util.Map</beans:value>
+			<beans:value>java.io.Serializable</beans:value>
 		</interfaces>
 		<bp:bean class="java.util.HashMap" />
 	</managed-service-factory>
 
 	<!-- update strategy specified -->
 	<managed-service-factory id="container-update"
-		factory-pid="my.pid" update-strategy="container-managed" auto-export="all-classes">
+		factory-pid="my.pid" autowire-on-update="true" auto-export="all-classes">
 		<bp:bean class="java.lang.Object" />
 	</managed-service-factory>
 
 	<managed-service-factory id="bp:bean-update"
-		factory-pid="my.pid" update-strategy="bp:bean-managed"
+		factory-pid="my.pid" autowire-on-update="false"
 		update-method="update" auto-export="all-classes">
 		<bp:bean class="java.lang.Object" />
 	</managed-service-factory>
@@ -59,20 +64,20 @@
 
 	<bp:bean id="simpleWUpdate" class="org.eclipse.gemini.blueprint.compendium.OneSetter">
 		<managed-properties persistent-id="simple"
-			update-strategy="container-managed" />
+			autowire-on-update="true" />
 	</bp:bean>
 
 	<bp:bean id="multipleWUpdate"
 		class="org.eclipse.gemini.blueprint.compendium.MultipleSetters">
 		<managed-properties persistent-id="multiple"
-			update-strategy="container-managed" />
-		<property name="integer" value="23" />
+			autowire-on-update="true" />
+<!-- 		<property name="integer" value="23" /> -->
 	</bp:bean>
 
-	<bp:bean id="bp:beanManaged"
+	<bp:bean id="beanManaged"
 		class="org.eclipse.gemini.blueprint.compendium.BeanManaged">
 		<managed-properties persistent-id="bp:bean-managed"
-			update-strategy="bp:bean-managed" update-method="update" />
-		<property name="integer" value="23" />
+			autowire-on-update="false" update-method="update" />
+<!-- 		<property name="integer" value="23" /> -->
 	</bp:bean>
 </bp:blueprint>

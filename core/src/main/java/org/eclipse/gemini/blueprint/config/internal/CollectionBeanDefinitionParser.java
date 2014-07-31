@@ -18,7 +18,7 @@ import java.util.Comparator;
 
 import org.eclipse.gemini.blueprint.config.internal.util.AttributeCallback;
 import org.eclipse.gemini.blueprint.config.internal.util.ParserUtils;
-import org.eclipse.gemini.blueprint.service.importer.support.CollectionType;
+import org.eclipse.gemini.blueprint.service.importer.support.CollectionTypeEnum;
 import org.eclipse.gemini.blueprint.service.importer.support.MemberType;
 import org.eclipse.gemini.blueprint.service.importer.support.OsgiServiceCollectionProxyFactoryBean;
 import org.eclipse.gemini.blueprint.service.importer.support.internal.util.ServiceReferenceComparator;
@@ -79,6 +79,7 @@ public abstract class CollectionBeanDefinitionParser extends AbstractReferenceDe
 
 	private static final String BASIS = "basis";
 
+	@Override
 	protected Class getBeanClass(Element element) {
 		return OsgiServiceCollectionProxyFactoryBean.class;
 	}
@@ -88,6 +89,7 @@ public abstract class CollectionBeanDefinitionParser extends AbstractReferenceDe
 	 * 
 	 * Add support for 'greedy-proxying' attribute.
 	 */
+	@Override
 	protected void parseAttributes(Element element, BeanDefinitionBuilder builder, AttributeCallback[] callbacks,
 			OsgiDefaultsDefinition defaults) {
 		// add timeout callback
@@ -96,6 +98,7 @@ public abstract class CollectionBeanDefinitionParser extends AbstractReferenceDe
 				new AttributeCallback[] { greedyProxyingCallback }), defaults);
 	}
 
+	@Override
 	protected void parseNestedElements(Element element, ParserContext context, BeanDefinitionBuilder builder) {
 		super.parseNestedElements(element, context, builder);
 		parseComparator(element, context, builder);
@@ -156,12 +159,12 @@ public abstract class CollectionBeanDefinitionParser extends AbstractReferenceDe
 		// so that the object natural ordering is used.
 
 		if (comparatorElement != null || hasComparatorRef) {
-			if (CollectionType.LIST.equals(collectionType())) {
-				builder.addPropertyValue(COLLECTION_TYPE_PROP, CollectionType.SORTED_LIST);
+			if (CollectionTypeEnum.LIST.equals(collectionType())) {
+				builder.addPropertyValue(COLLECTION_TYPE_PROP, CollectionTypeEnum.SORTED_LIST);
 			}
 
-			if (CollectionType.SET.equals(collectionType())) {
-				builder.addPropertyValue(COLLECTION_TYPE_PROP, CollectionType.SORTED_SET);
+			if (CollectionTypeEnum.SET.equals(collectionType())) {
+				builder.addPropertyValue(COLLECTION_TYPE_PROP, CollectionTypeEnum.SORTED_SET);
 			}
 		} else {
 			builder.addPropertyValue(COLLECTION_TYPE_PROP, collectionType());
@@ -203,5 +206,5 @@ public abstract class CollectionBeanDefinitionParser extends AbstractReferenceDe
 	 * 
 	 * @return service collection type
 	 */
-	protected abstract CollectionType collectionType();
+	protected abstract CollectionTypeEnum collectionType();
 }

@@ -20,7 +20,7 @@ import org.eclipse.gemini.blueprint.config.internal.CollectionBeanDefinitionPars
 import org.eclipse.gemini.blueprint.config.internal.OsgiDefaultsDefinition;
 import org.eclipse.gemini.blueprint.config.internal.util.AttributeCallback;
 import org.eclipse.gemini.blueprint.config.internal.util.ParserUtils;
-import org.eclipse.gemini.blueprint.service.importer.support.CollectionType;
+import org.eclipse.gemini.blueprint.service.importer.support.CollectionTypeEnum;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -76,7 +76,7 @@ public abstract class BlueprintCollectionBeanDefinitionParser extends Collection
 	}
 
 	@Override
-	protected CollectionType collectionType() {
+	protected CollectionTypeEnum collectionType() {
 		return null;
 	}
 

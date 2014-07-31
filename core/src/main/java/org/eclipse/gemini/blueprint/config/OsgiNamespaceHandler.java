@@ -19,7 +19,7 @@ import org.eclipse.gemini.blueprint.config.internal.BundleBeanDefinitionParser;
 import org.eclipse.gemini.blueprint.config.internal.CollectionBeanDefinitionParser;
 import org.eclipse.gemini.blueprint.config.internal.ReferenceBeanDefinitionParser;
 import org.eclipse.gemini.blueprint.config.internal.ServiceBeanDefinitionParser;
-import org.eclipse.gemini.blueprint.service.importer.support.CollectionType;
+import org.eclipse.gemini.blueprint.service.importer.support.CollectionTypeEnum;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
@@ -41,15 +41,17 @@ class OsgiNamespaceHandler extends NamespaceHandlerSupport {
 
 		registerBeanDefinitionParser("list", new CollectionBeanDefinitionParser() {
 
-			protected CollectionType collectionType() {
-				return CollectionType.LIST;
+			@Override
+			protected CollectionTypeEnum collectionType() {
+				return CollectionTypeEnum.LIST;
 			}
 		});
 
 		registerBeanDefinitionParser("set", new CollectionBeanDefinitionParser() {
 
-			protected CollectionType collectionType() {
-				return CollectionType.SET;
+			@Override
+			protected CollectionTypeEnum collectionType() {
+				return CollectionTypeEnum.SET;
 			}
 		});
 

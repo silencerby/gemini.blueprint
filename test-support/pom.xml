@@ -55,9 +55,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.maven.artifact.version}</version>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.spring-test</artifactId>
             <exclusions>
                 <!-- exclude spring-test junit (3.8.1) -->
                 <exclusion>

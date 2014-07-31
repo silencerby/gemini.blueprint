@@ -24,6 +24,7 @@ import org.eclipse.gemini.blueprint.config.internal.adapter.OsgiServiceRegistrat
 import org.eclipse.gemini.blueprint.config.internal.util.AttributeCallback;
 import org.eclipse.gemini.blueprint.config.internal.util.ParserUtils;
 import org.eclipse.gemini.blueprint.service.exporter.support.DefaultInterfaceDetector;
+import org.eclipse.gemini.blueprint.service.exporter.support.ExportContextClassLoaderEnum;
 import org.eclipse.gemini.blueprint.service.exporter.support.OsgiServiceFactoryBean;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
@@ -81,7 +82,7 @@ public class ServiceBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
 				// conversion
 
 				String value = attribute.getValue().toUpperCase(Locale.ENGLISH).replace('-', '_');
-				bldr.addPropertyValue(CCL_PROP, value);
+				bldr.addPropertyValue(CCL_PROP, Enum.valueOf(ExportContextClassLoaderEnum.class, value));
 				return false;
 			}
 
@@ -100,7 +101,7 @@ public class ServiceBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
 
 	private static final String AUTOEXPORT_PROP = "interfaceDetector";
 
-	private static final String CCL_PROP = "contextClassLoader";
+	private static final String CCL_PROP = "exportContextClassLoader";
 	// XML elements
 	private static final String INTERFACES_ID = "interfaces";
 
@@ -116,10 +117,12 @@ public class ServiceBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
 
 	private static final String CONTEXT_CLASSLOADER = "context-class-loader";
 
+	@Override
 	protected Class getBeanClass(Element element) {
 		return OsgiServiceFactoryBean.class;
 	}
 
+	@Override
 	protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
 		builder.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		builder.getRawBeanDefinition().setSource(parserContext.extractSource(element));
@@ -344,6 +347,7 @@ public class ServiceBeanDefinitionParser extends AbstractSingleBeanDefinitionPar
 
 	}
 
+	@Override
 	protected boolean shouldGenerateIdAsFallback() {
 		return true;
 	}

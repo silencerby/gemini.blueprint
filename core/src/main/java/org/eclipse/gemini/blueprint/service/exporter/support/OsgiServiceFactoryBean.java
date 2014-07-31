@@ -219,8 +219,7 @@ public class OsgiServiceFactoryBean extends AbstractOsgiServiceExporter implemen
 
 		// sanity check
 		if (interfaces == null) {
-			if (AutoExport.DISABLED.equals(interfaceDetector)
-					|| DefaultInterfaceDetector.DISABLED.equals(interfaceDetector))
+			if (DefaultInterfaceDetector.DISABLED.equals(interfaceDetector))
 				throw new IllegalArgumentException(
 						"No service interface(s) specified and auto-export discovery disabled; change at least one of these properties.");
 			interfaces = new Class[0];
@@ -255,6 +254,7 @@ public class OsgiServiceFactoryBean extends AbstractOsgiServiceExporter implemen
 		}
 	}
 
+	@Override
 	public void destroy() {
 		if (propertiesListener != null) {
 			if (serviceProperties instanceof ServicePropertiesListenerManager) {
@@ -429,6 +429,7 @@ public class OsgiServiceFactoryBean extends AbstractOsgiServiceExporter implemen
 		return true;
 	}
 
+	@Override
 	void unregisterService() {
 		synchronized (lock) {
 			if (!serviceRegistered)
@@ -452,23 +453,6 @@ public class OsgiServiceFactoryBean extends AbstractOsgiServiceExporter implemen
 			if (resolver != null)
 				resolver.setDecorator(null);
 		}
-	}
-
-	/**
-	 * Sets the context class loader management strategy to use when invoking operations on the exposed target bean. By
-	 * default, {@link ExportContextClassLoader#UNMANAGED} is used.
-	 * 
-	 * <p/> <strong>Note:</strong> Since proxying is required for context class loader manager, the target class has to
-	 * meet certain criteria described in the Spring AOP documentation. In short, final classes are not supported when
-	 * class enhancement is used.
-	 * 
-	 * @param ccl context class loader strategy to use
-	 * @see ExportContextClassLoader
-	 * @deprecated As of Spring DM 2.0, replaced by {@link #setExportContextClassLoader(ExportContextClassLoaderEnum)}
-	 */
-	public void setContextClassLoader(ExportContextClassLoader ccl) {
-		Assert.notNull(ccl);
-		this.contextClassLoader = ccl.getExportContextClassLoaderEnum();
 	}
 
 	/**
@@ -524,21 +508,6 @@ public class OsgiServiceFactoryBean extends AbstractOsgiServiceExporter implemen
 	 */
 	public void setTargetBeanName(String name) {
 		this.targetBeanName = name;
-	}
-
-	/**
-	 * Sets the strategy used for automatically publishing classes. This allows the exporter to use the target class
-	 * hierarchy and/or interfaces for registering the OSGi service. By default, autoExport is disabled
-	 * {@link AutoExport#DISABLED}.
-	 * 
-	 * @param classExporter class exporter used for automatically publishing service classes.
-	 * 
-	 * @see AutoExport
-	 * @deprecated
-	 */
-	public void setAutoExport(AutoExport classExporter) {
-		Assert.notNull(classExporter);
-		this.interfaceDetector = classExporter;
 	}
 
 	/**

@@ -121,10 +121,12 @@ public final class OsgiServiceProxyFactoryBean extends AbstractServiceImporterPr
 	 * 
 	 * Returns a managed proxy to the best matching OSGi service.
 	 */
+	@Override
 	public Object getObject() {
 		return super.getObject();
 	}
 
+	@Override
 	Object createProxy(boolean lazyProxy) {
 		if (log.isDebugEnabled())
 			log.debug("Creating a single service proxy ...");
@@ -169,10 +171,12 @@ public final class OsgiServiceProxyFactoryBean extends AbstractServiceImporterPr
 				new AbstractServiceProxyCreator(getInterfaces(), getAopClassLoader(), getBeanClassLoader(),
 						getBundleContext(), getImportContextClassLoader()) {
 
+					@Override
 					ServiceInvoker createDispatcherInterceptor(ServiceReference reference) {
 						return lookupAdvice;
 					}
 
+					@Override
 					Advice createServiceProviderTCCLAdvice(ServiceReference reference) {
 						return tcclAdvice;
 					}
@@ -280,10 +284,5 @@ public final class OsgiServiceProxyFactoryBean extends AbstractServiceImporterPr
 		synchronized (monitor) {
 			this.applicationEventPublisher = applicationEventPublisher;
 		}
-	}
-
-	@Override
-	Cardinality getInternalCardinality() {
-		return (Availability.OPTIONAL.equals(getAvailability()) ? Cardinality.C_0__1 : Cardinality.C_1__1);
 	}
 }

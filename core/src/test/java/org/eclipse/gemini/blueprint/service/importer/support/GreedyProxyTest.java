@@ -14,6 +14,10 @@
 
 package org.eclipse.gemini.blueprint.service.importer.support;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -23,13 +27,12 @@ import java.util.List;
 
 import javax.print.attribute.SupportedValuesAttribute;
 
-import junit.framework.TestCase;
-
-import org.eclipse.gemini.blueprint.service.importer.support.ImportContextClassLoaderEnum;
-import org.osgi.framework.BundleContext;
-import org.springframework.core.enums.LabeledEnum;
 import org.eclipse.gemini.blueprint.mock.MockBundleContext;
 import org.eclipse.gemini.blueprint.mock.MockServiceReference;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.osgi.framework.BundleContext;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -37,13 +40,14 @@ import org.springframework.util.CollectionUtils;
  * 
  * @author Costin Leau
  */
-public class GreedyProxyTest extends TestCase {
+public class GreedyProxyTest {
 
 	private StaticServiceProxyCreator proxyCreator;
 
 	private String[] classesAsStrings = new String[] { Serializable.class.getName(), Comparable.class.getName() };
 
-	protected void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		Class<?>[] classes = new Class<?>[] { Serializable.class, Comparable.class };
 
 		proxyCreator = createProxyCreator(classes);
@@ -55,15 +59,16 @@ public class GreedyProxyTest extends TestCase {
 		return new StaticServiceProxyCreator(classes, cl, cl, ctx, ImportContextClassLoaderEnum.UNMANAGED, true, false);
 	}
 
-	protected void tearDown() throws Exception {
+	@After
+	public void tearDown() throws Exception {
 		proxyCreator = null;
 	}
 
 	private String[] addExtraIntfs(String[] extraIntfs) {
-		List list = new ArrayList();
+		List<String> list = new ArrayList<String>();
 		CollectionUtils.mergeArrayIntoCollection(extraIntfs, list);
 		CollectionUtils.mergeArrayIntoCollection(classesAsStrings, list);
-		return (String[]) list.toArray(new String[list.size()]);
+		return list.toArray(new String[list.size()]);
 	}
 
 	private boolean containsClass(Class<?>[] classes, Class<?> clazz) {
@@ -74,6 +79,7 @@ public class GreedyProxyTest extends TestCase {
 		return false;
 	}
 
+	@Test
 	public void testMoreInterfacesAvailable() throws Exception {
 		String[] extraClasses = new String[] { Cloneable.class.getName(), Runnable.class.getName() };
 
@@ -85,6 +91,7 @@ public class GreedyProxyTest extends TestCase {
 		assertTrue(containsClass(clazzes, Serializable.class));
 	}
 
+	@Test
 	public void testNonVisibleOrInvalidInterfacesFound() throws Exception {
 		String[] extraClasses = new String[] { "a", "nonExistingClass" };
 
@@ -96,17 +103,19 @@ public class GreedyProxyTest extends TestCase {
 		assertTrue(containsClass(clazzes, Comparable.class));
 	}
 
+	@Test
 	public void testParentInterfaces() throws Exception {
-		String[] extraClasses = new String[] { SupportedValuesAttribute.class.getName(), LabeledEnum.class.getName() };
+		String[] extraClasses = new String[] { SupportedValuesAttribute.class.getName(), Serializable.class.getName() };
 
 		MockServiceReference ref = new MockServiceReference(addExtraIntfs(extraClasses));
 		Class<?>[] clazzes = proxyCreator.discoverProxyClasses(ref);
 		assertEquals(2, clazzes.length);
-		assertTrue(containsClass(clazzes, LabeledEnum.class));
-		assertFalse(containsClass(clazzes, Comparable.class));
+		assertFalse(containsClass(clazzes, Serializable.class));
+		assertTrue(containsClass(clazzes, Comparable.class));
 		assertTrue(containsClass(clazzes, SupportedValuesAttribute.class));
 	}
 
+	@Test
 	public void testExcludeFinalClass() throws Exception {
 		String[] extraClasses = new String[] { Object.class.getName(), Byte.class.getName() };
 		MockServiceReference ref = new MockServiceReference(addExtraIntfs(extraClasses));
@@ -117,6 +126,7 @@ public class GreedyProxyTest extends TestCase {
 		assertTrue(containsClass(clazzes, Serializable.class));
 	}
 
+	@Test
 	public void testInterfacesOnlyAllowed() throws Exception {
 		String[] extraClasses = new String[] { Object.class.getName() };
 
@@ -126,6 +136,7 @@ public class GreedyProxyTest extends TestCase {
 		assertFalse(containsClass(clazzes, Object.class));
 	}
 
+	@Test
 	public void testAllowConcreteClasses() throws Exception {
 		Class<?>[] classes = new Class<?>[] { Serializable.class, Comparable.class, Date.class };
 		proxyCreator = createProxyCreator(classes);
@@ -139,6 +150,7 @@ public class GreedyProxyTest extends TestCase {
 		assertTrue(containsClass(clazzes, Date.class));
 	}
 
+	@Test
 	public void testRemoveParentsWithClassesAndInterfaces() throws Exception {
 		Class<?>[] classes = new Class<?>[] { Serializable.class, Comparable.class, Date.class };
 		proxyCreator = createProxyCreator(classes);
